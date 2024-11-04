@@ -1,0 +1,75 @@
+# List All Trips
+GET {{URL}}/trips/
+Accept: application/json
+
+###
+
+# Get Trip by ID
+GET {{URL}}/trips/1
+Accept: application/json
+
+###
+
+# Get trips by guide ID
+GET {{URL}}/trips/guides/1
+Accept: application/json
+
+###
+
+# Get trips by category
+GET {{URL}}/trips/category/ADVENTURE
+Accept: application/json
+
+###
+
+# Get Total Price of All Trips by Each Guide
+GET {{URL}}/trips/guides/totalprice
+Accept: application/json
+
+###
+
+# Create New Trip
+POST {{URL}}/trips/
+Content-Type: application/json
+
+{
+  "startTime": "2024-06-01T08:00:00",
+  "endTime": "2024-06-01T18:00:00",
+  "startLocation": "Mountain Base",
+  "name": "Mountain Excursion",
+  "price": 150,
+  "category": "ADVENTURE"
+}
+
+###
+
+# Update Trip by ID
+PUT {{URL}}/trips/1
+Content-Type: application/json
+
+{
+  "startTime": "2024-06-01T09:00:00",
+  "endTime": "2024-06-01T19:00:00",
+  "startLocation": "Mountain Base Updated",
+  "name": "Mountain Excursion Updated",
+  "price": 175,
+  "category": "ADVENTURE"
+}
+
+###
+
+# Add Guide to Trip
+PUT {{URL}}/trips/7/guides/2
+Accept: application/json
+
+###
+
+# Delete Trip by ID
+DELETE {{URL}}/trips/1
+Accept: application/json
+
+###
+
+# Populate Database with Sample Data
+POST {{URL}}/trips/populate
+Accept: application/json
