@@ -3,7 +3,6 @@ package app.routes;
 import app.config.HibernateConfig;
 import app.config.Populate;
 import app.controllers.TripController;
-import app.daos.impl.GuideDAO;
 import app.daos.impl.TripDAO;
 import app.security.enums.Role;
 import app.service.TripService;
@@ -18,9 +17,8 @@ public class TripRoutes
     private final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
 
     private final TripDAO tripDao = new TripDAO(emf);
-    private final GuideDAO guideDao = new GuideDAO(emf);
     private final TripService tripService = new TripService();
-    private final TripController tripController = new TripController(tripDao, guideDao, tripService);
+    private final TripController tripController = new TripController(tripDao, tripService);
     private final Populate populate = new Populate(emf);
 
 

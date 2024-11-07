@@ -177,7 +177,6 @@ public class Populate {
         return new UserDTO[]{userDTO, adminDTO};
     }
 
-
     public static void cleanDB(EntityManagerFactory emf) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();

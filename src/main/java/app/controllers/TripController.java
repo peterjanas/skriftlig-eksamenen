@@ -1,6 +1,5 @@
 package app.controllers;
 
-import app.daos.impl.GuideDAO;
 import app.daos.impl.TripDAO;
 import app.dtos.GuideTotalPriceDTO;
 import app.dtos.PackingItemDTO;
@@ -19,13 +18,11 @@ import java.util.Set;
 public class TripController implements IController
 {
     private final TripDAO tripDao;
-    private final GuideDAO guideDao;
     private final TripService tripService;
 
-    public TripController(TripDAO tripDao, GuideDAO guideDao, TripService tripService)
+    public TripController(TripDAO tripDao, TripService tripService)
     {
         this.tripDao = tripDao;
-        this.guideDao = guideDao;
         this.tripService = tripService;
     }
 
@@ -167,7 +164,7 @@ public class TripController implements IController
     }
 
     public void getPackingItemsByCategory(Context ctx) throws ApiException {
-        String category = ctx.pathParam("category").toLowerCase(); // Ensure the category matches API expectations
+        String category = ctx.pathParam("category").toLowerCase();
         try {
             List<PackingItemDTO> packingItemDTOS = tripService.getPackingItemsByCategory(category);
             ctx.json(packingItemDTOS);
