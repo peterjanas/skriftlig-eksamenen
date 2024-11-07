@@ -1,5 +1,8 @@
 package app.config;
 
+
+import app.controllers.ExceptionController;
+import app.entities.Message;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import app.routes.Routes;
 import app.security.controllers.AccessController;
@@ -18,10 +21,12 @@ public class ApplicationConfig
 {
 
     private static Routes routes = new Routes();
+    private static final ExceptionController exceptionController = new ExceptionController();
     private static ObjectMapper jsonMapper = new Utils().getObjectMapper();
     private static SecurityController securityController = SecurityController.getInstance();
     private static AccessController accessController = new AccessController();
     private static Logger logger = LoggerFactory.getLogger(ApplicationConfig.class);
+
     private static Javalin app;
 
     public static void configuration(JavalinConfig config)
@@ -34,16 +39,21 @@ public class ApplicationConfig
         config.router.apiBuilder(SecurityRoutes.getSecurityRoutes());
     }
 
+    private static void exceptionContext(Javalin app) {
+
+        app.exception(ApiException.class, exceptionController::apiExceptionHandler);
+        app.exception(Exception.class, exceptionController::exceptionHandler);
+
+
+    }
+
     public static Javalin startServer(int port)
     {
         Javalin app = Javalin.create(ApplicationConfig::configuration);
-
+        exceptionContext(app);
         app.beforeMatched(accessController::accessHandler);
-
-        app.beforeMatched(ctx -> accessController.accessHandler(ctx));
-
-        app.exception(Exception.class, ApplicationConfig::generalExceptionHandler);
-        app.exception(ApiException.class, ApplicationConfig::apiExceptionHandler);
+        app.get("*", ctx -> {throw new ApiException(404, "Resource not found");});
+        app.error(500, ctx -> {ctx.json(new Message(500, "Internal server error"));});
         app.start(port);
         return app;
     }
@@ -53,6 +63,8 @@ public class ApplicationConfig
         app.stop();
     }
 
+
+/*
     private static void generalExceptionHandler(Exception e, Context ctx)
     {
         logger.error("An unhandled exception occurred", e.getMessage());
@@ -65,4 +77,6 @@ public class ApplicationConfig
         logger.warn("An API exception occurred: Code: {}, Message: {}", e.getCode(), e.getMessage());
         ctx.json(Utils.convertToJsonMessage(ctx, "warning", e.getMessage()));
     }
+
+ */
 }
