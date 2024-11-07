@@ -27,7 +27,7 @@ public class TripRoutes
         return () ->
         {
             get("trips/{id}", tripController::read, Role.ANYONE);
-            get("trips/", tripController::readAll, Role.ANYONE );
+            get("trips/", tripController::readAll, Role.USER );
             get("trips/guides/totalprice", tripController::getTotalPriceByGuide, Role.ANYONE);
             get("trips/guides/{guideId}", tripController::getTripsByGuide, Role.ANYONE);
             get("trips/category/{category}", tripController::getTripsByCategory, Role.ANYONE);

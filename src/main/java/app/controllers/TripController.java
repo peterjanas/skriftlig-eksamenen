@@ -57,7 +57,7 @@ public class TripController implements IController
             Integer guideId = Integer.parseInt(ctx.pathParam("guideId"));
             Set<Trip> trips = tripDao.getTripsByGuide(guideId);
 
-            // Convert to TripDTO list
+
             List<TripDTO> tripDtos = TripDTO.toTripDTOList(new ArrayList<>(trips));
 
             ctx.res().setStatus(200);
@@ -70,7 +70,7 @@ public class TripController implements IController
     public void getTripsByCategory(Context ctx) throws ApiException {
         try {
             String categoryParam = ctx.pathParam("category").toUpperCase();
-            Category category = Category.valueOf(categoryParam); // Parse the category from the path parameter
+            Category category = Category.valueOf(categoryParam);
 
             List<Trip> trips = tripDao.getTripsByCategory(category);
             List<TripDTO> tripDtos = TripDTO.toTripDTOList(trips);
@@ -87,8 +87,6 @@ public class TripController implements IController
         ctx.res().setStatus(200);
         ctx.json(results);
     }
-
-
 
 
 

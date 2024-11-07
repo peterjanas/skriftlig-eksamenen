@@ -3,6 +3,9 @@ package app.config;
 import app.entities.Guide;
 import app.entities.Trip;
 import app.enums.Category;
+import app.security.entities.Role;
+import app.security.entities.User;
+import dk.bugelhartmann.UserDTO;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -148,12 +151,40 @@ public class Populate {
         return new HashSet<>(List.of(trip1, trip2, trip3));
     }
 
+    public static UserDTO[] populateUsers(EntityManagerFactory emf)
+    {
+        User user, admin;
+        Role userRole, adminRole;
+
+        user = new User("usertest", "user123");
+        admin = new User("admintest", "admin123");
+        userRole = new Role("USER");
+        adminRole = new Role("ADMIN");
+        user.addRole(userRole);
+        admin.addRole(adminRole);
+
+        try (var em = emf.createEntityManager())
+        {
+            em.getTransaction().begin();
+            em.persist(userRole);
+            em.persist(adminRole);
+            em.persist(user);
+            em.persist(admin);
+            em.getTransaction().commit();
+        }
+        UserDTO userDTO = new UserDTO(user.getUsername(), "user123");
+        UserDTO adminDTO = new UserDTO(admin.getUsername(), "admin123");
+        return new UserDTO[]{userDTO, adminDTO};
+    }
+
 
     public static void cleanDB(EntityManagerFactory emf) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             em.createQuery("DELETE FROM Trip").executeUpdate();
             em.createQuery("DELETE FROM Guide").executeUpdate();
+            em.createQuery("DELETE FROM User").executeUpdate();
+            em.createQuery("DELETE FROM Role").executeUpdate();
             em.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
