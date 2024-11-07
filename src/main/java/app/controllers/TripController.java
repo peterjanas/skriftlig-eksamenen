@@ -3,27 +3,30 @@ package app.controllers;
 import app.daos.impl.GuideDAO;
 import app.daos.impl.TripDAO;
 import app.dtos.GuideTotalPriceDTO;
+import app.dtos.PackingItemDTO;
 import app.dtos.TripDTO;
 import app.entities.Trip;
 import app.enums.Category;
 import app.exceptions.ApiException;
+import app.service.TripService;
 import io.javalin.http.Context;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class TripController implements IController
 {
     private final TripDAO tripDao;
     private final GuideDAO guideDao;
+    private final TripService tripService;
 
-    public TripController(TripDAO tripDao, GuideDAO guideDao)
+    public TripController(TripDAO tripDao, GuideDAO guideDao, TripService tripService)
     {
         this.tripDao = tripDao;
         this.guideDao = guideDao;
+        this.tripService = tripService;
     }
 
 
@@ -162,4 +165,15 @@ public class TripController implements IController
             throw new ApiException(400, "Invalid trip or guide ID format");
         }
     }
+
+    public void getPackingItemsByCategory(Context ctx) throws ApiException {
+        String category = ctx.pathParam("category").toLowerCase(); // Ensure the category matches API expectations
+        try {
+            List<PackingItemDTO> packingItemDTOS = tripService.getPackingItemsByCategory(category);
+            ctx.json(packingItemDTOS);
+        } catch (IOException | InterruptedException e) {
+            throw new ApiException(500, "Error fetching packing items: " + e.getMessage());
+        }
+    }
+
 }

@@ -6,6 +6,7 @@ import app.controllers.TripController;
 import app.daos.impl.GuideDAO;
 import app.daos.impl.TripDAO;
 import app.security.enums.Role;
+import app.service.TripService;
 import io.javalin.apibuilder.EndpointGroup;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -18,8 +19,10 @@ public class TripRoutes
 
     private final TripDAO tripDao = new TripDAO(emf);
     private final GuideDAO guideDao = new GuideDAO(emf);
-    private final TripController tripController = new TripController(tripDao, guideDao);
+    private final TripService tripService = new TripService();
+    private final TripController tripController = new TripController(tripDao, guideDao, tripService);
     private final Populate populate = new Populate(emf);
+
 
 
 
@@ -36,6 +39,8 @@ public class TripRoutes
             delete("trips/{id}", tripController::delete, Role.ANYONE);
             put("trips/{tripId}/guides/{guideId}", tripController::addGuideToTrip, Role.ANYONE);
             post("trips/populate", populate::populateDbFromHttp,Role.ANYONE);
+            get("trips/packingitems/{category}", tripController::getPackingItemsByCategory, Role.ANYONE);
+
         };
     }
 }

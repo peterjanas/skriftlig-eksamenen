@@ -70,6 +70,13 @@ Accept: application/json
 
 ###
 
+# get packing list by category
+GET {{URL}}/trips/packingitems/Beach
+Accept: application/json
+
+###
+
+
 # Populate Database with Sample Data
 POST {{URL}}/trips/populate
 Accept: application/json

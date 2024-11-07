@@ -1,25 +1,23 @@
 package app.config;
 
-
 import app.controllers.ExceptionController;
 import app.entities.Message;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import app.exceptions.ApiException;
 import app.routes.Routes;
 import app.security.controllers.AccessController;
-import app.security.controllers.SecurityController;
-import app.security.enums.Role;
-import app.security.exceptions.ApiException;
 import app.security.routes.SecurityRoutes;
-import app.utils.Utils;
 import io.javalin.Javalin;
 import io.javalin.config.JavalinConfig;
-import io.javalin.http.Context;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import app.security.controllers.SecurityController;
+import app.security.enums.Role;
+import app.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ApplicationConfig
 {
-
     private static Routes routes = new Routes();
     private static final ExceptionController exceptionController = new ExceptionController();
     private static ObjectMapper jsonMapper = new Utils().getObjectMapper();
