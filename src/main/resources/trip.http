@@ -71,7 +71,7 @@ Accept: application/json
 ###
 
 # get packing list by category
-GET {{URL}}/trips/packingitems/Beach
+GET {{URL}}/trips/packingitems/beach
 Accept: application/json
 
 ###
